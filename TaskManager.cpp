@@ -115,6 +115,7 @@ tm_return_status_t tm_delete_task(void (* task_function)(void *)) {
     return TM_INIT_FAILED;
   }
   Task_t * delete_task = NULL;
+  Task_t * task_from_queue = NULL;
   Task_t * last_task = NULL;
   if (task_function == NULL) {
     return TM_TASK_FUNCTION_IS_EMPTY;
@@ -123,6 +124,13 @@ tm_return_status_t tm_delete_task(void (* task_function)(void *)) {
   for (uint8_t i = 0; i < task_manager.size; i++) {
     if (task_manager.task_list[i]->task_function == task_function) {
       delete_task = task_manager.task_list[i];
+      for (uint8_t j = 0; j < q_get_size(task_manager.task_queue); j++) {
+        task_from_queue = (Task_t *)q_pop(task_manager.task_queue);
+        if (task_from_queue == delete_task) {
+          break;
+        }
+        q_push(task_manager.task_queue, task_from_queue);
+      }
       last_task = task_manager.task_list[task_manager.size - 1];
       task_manager.task_list[i] = last_task;
       task_manager.task_list[task_manager.size - 1] = NULL;
