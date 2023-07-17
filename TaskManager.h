@@ -20,7 +20,7 @@ typedef enum {
   TM_ROLL_MODE
 } tm_task_run_mode_t;
 
-tm_return_status_t tm_init_task_manager(uint8_t capacity, void (* disable_interrupt)(void), void (* enable_interrupt)(void));
+tm_return_status_t tm_init_task_manager(uint8_t capacity);
 
 void tm_sheduler(void);
 
@@ -33,5 +33,7 @@ tm_return_status_t tm_delete_task(void (* task_function)(void *));
 tm_return_status_t tm_set_delay(void (* task_function)(void *), uint32_t delay);
 
 tm_return_status_t tm_set_timeout(void (* task_function)(void *), uint32_t timeout);
+
+uint8_t get_task_number(void);
 
 #endif
